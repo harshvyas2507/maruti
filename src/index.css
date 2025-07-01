@@ -1,0 +1,176 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom styles */
+:root {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #e0f7fa 0%, #b3e5fc 40%, #90caf9 100%);
+  background-attachment: fixed;
+  color: #1a237e;
+}
+
+a {
+  font-weight: 500;
+  color: #646cff;
+  text-decoration: inherit;
+}
+a:hover {
+  color: #535bf2;
+}
+
+h1 {
+  font-size: 3.2em;
+  line-height: 1.1;
+}
+
+button {
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: #1a1a1a;
+  cursor: pointer;
+  transition: border-color 0.25s;
+}
+button:hover {
+  border-color: #646cff;
+}
+button:focus,
+button:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    color: #213547;
+  }
+  a:hover {
+    color: #1976d2;
+  }
+  button {
+    background-color: #e3f2fd;
+  }
+}
+
+/* Water drop animation for logo */
+@keyframes waterDrop {
+  0%, 100% {
+    transform: translateY(0) scale(1);
+    filter: drop-shadow(0 0 8px #38bdf8);
+  }
+  20% {
+    transform: translateY(-8px) scale(1.05);
+    filter: drop-shadow(0 0 16px #0ea5e9);
+  }
+  40% {
+    transform: translateY(4px) scale(0.98);
+    filter: drop-shadow(0 0 12px #38bdf8);
+  }
+  60% {
+    transform: translateY(-4px) scale(1.02);
+    filter: drop-shadow(0 0 20px #0ea5e9);
+  }
+  80% {
+    transform: translateY(2px) scale(1.01);
+    filter: drop-shadow(0 0 10px #38bdf8);
+  }
+}
+.animate-waterDrop {
+  animation: waterDrop 2.5s infinite cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Responsive font and logo adjustments */
+@media (max-width: 640px) {
+  .navbar-logo {
+    height: 48px !important;
+    width: 48px !important;
+    min-width: 40px !important;
+    min-height: 40px !important;
+  }
+  .navbar-title {
+    font-size: 1.25rem !important;
+    margin-left: 0.5rem !important;
+  }
+}
+
+/* Water ripple effect for hero/sections (optional utility) */
+.ripple-bg {
+  background: radial-gradient(circle at 50% 50%, #e0f7fa 0%, #b3e5fc 100%);
+  animation: rippleMove 6s infinite alternate;
+  position: relative;
+  overflow: hidden;
+}
+@keyframes rippleMove {
+  0% { background-position: 50% 50%; }
+  100% { background-position: 60% 40%; }
+}
+
+/* Animated SVG Waves */
+.ripple-bg::before {
+  content: '';
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  height: 120px;
+  background: url('data:image/svg+xml;utf8,<svg width="100%25" height="100%25" viewBox="0 0 1440 120" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M0 67L60 61.2C120 55.3 240 43.7 360 49.8C480 56 600 80 720 80.2C840 80.3 960 56.7 1080 49.8C1200 43 1320 53 1380 58L1440 63V120H1380C1320 120 1200 120 1080 120C960 120 840 120 720 120C600 120 480 120 360 120C240 120 120 120 60 120H0V67Z" fill="%2300b4d8" fill-opacity="0.25"/><path d="M0 87L60 81.2C120 75.3 240 63.7 360 69.8C480 76 600 100 720 100.2C840 100.3 960 76.7 1080 69.8C1200 63 1320 73 1380 78L1440 83V120H1380C1320 120 1200 120 1080 120C960 120 840 120 720 120C600 120 480 120 360 120C240 120 120 120 60 120H0V87Z" fill="%2300b4d8" fill-opacity="0.35"/></svg>');
+  background-size: cover;
+  background-repeat: no-repeat;
+  animation: waveMove 8s linear infinite;
+  z-index: 1;
+  pointer-events: none;
+}
+@keyframes waveMove {
+  0% { background-position-x: 0; }
+  100% { background-position-x: 200px; }
+}
+
+/* Floating Bubbles */
+.ripple-bg .bubble {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.25);
+  animation: bubbleFloat 12s linear infinite;
+  z-index: 2;
+  pointer-events: none;
+}
+@keyframes bubbleFloat {
+  0% { transform: translateY(0) scale(1); opacity: 0.7; }
+  80% { opacity: 0.7; }
+  100% { transform: translateY(-600px) scale(1.2); opacity: 0; }
+}
+
+/* Fade In Animations for About Page */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+.animate-fadeIn {
+  animation: fadeIn 1s ease-in both;
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.animate-fadeInUp {
+  animation: fadeInUp 1s ease-in both;
+}
+
+.delay-100 { animation-delay: 0.1s; }
+.delay-200 { animation-delay: 0.2s; }
+.delay-300 { animation-delay: 0.3s; }
+.delay-400 { animation-delay: 0.4s; }
+.delay-500 { animation-delay: 0.5s; }
+.delay-600 { animation-delay: 0.6s; }
+.delay-700 { animation-delay: 0.7s; }
+
+/* Remove water drop animation if not needed */
+.animate-waterDrop { animation: none !important; }
