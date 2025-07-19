@@ -74,7 +74,7 @@ const About = () => {
           <h2 className="text-3xl font-semibold mb-6 text-center">Our Mission</h2>
           <p className="text-center text-lg">
             To provide our customers with the highest quality beverages while maintaining the highest standards of service and reliability.
-            We strive to be the most trusted name in the beverage industry in Bhavnagar and beyond.
+            We strive to be the most trusted name in the beverage industry in Gujarat and beyond.
           </p>
         </div>
       </div>
