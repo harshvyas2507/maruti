@@ -40,38 +40,3 @@
 .read-the-docs {
   color: #888;
 }
-
-body {
-  font-family: 'Inter', 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
-  background: linear-gradient(135deg, #e0f2fe 0%, #90cdf4 40%, #38bdf8 100%);
-  color: #222;
-  min-height: 100vh;
-}
-
-h1, h2, h3, h4, h5, h6 {
-  font-family: 'Inter', 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
-  letter-spacing: -0.5px;
-}
-
-.cardBase, .product-card {
-  margin-bottom: 2rem;
-  padding: 1.5rem 1rem;
-  border-radius: 1rem;
-  box-shadow: 0 2px 16px rgba(0,0,0,0.07);
-  background: #fff;
-}
-
-.product-card h3 {
-  margin-top: 1rem;
-  margin-bottom: 0.5rem;
-}
-
-.product-card p {
-  margin-bottom: 0.5rem;
-}
-
-@media (max-width: 640px) {
-  .cardBase, .product-card {
-    padding: 1rem 0.5rem;
-  }
-}

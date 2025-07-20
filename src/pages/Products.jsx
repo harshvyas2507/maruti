@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react';
 import rcWater from '../assets/rc_water.jpg';
 import americanPride from '../assets/american_pride_photo.jpg';
 import bdSoda from '../assets/bd_soda.jpg';
@@ -7,149 +6,151 @@ import bdSoda2 from '../assets/bd_soda2.jpg';
 import bdLogo from '../assets/bd_logo.jpg';
 import rcBanner from '../assets/rc_banner.jpg';
 import americanPrideVideo from '../assets/american_pride_video.mp4';
-import oneLiterBlackDog from '../assets/1liter_blckdog.png';
-import fiveHundredMlBlackDog from '../assets/500ml_bd.png';
-import blackDogBoth from '../assets/blakcdogboth.png';
-import { FaMedal, FaTint, FaCrown, FaDog } from 'react-icons/fa';
+import { useState } from 'react';
+import { Canvas } from '@react-three/fiber';
+import { OrbitControls } from '@react-three/drei';
 
-const cardBase = "bg-white/70 backdrop-blur-md rounded-lg shadow-lg overflow-hidden flex flex-col items-center p-4 sm:p-6 transition-transform duration-300 hover:shadow-xl hover:border-blue-200 border border-transparent animate-fadeInUp";
-const imgBase = "object-contain mb-4 transition-transform duration-300";
-
-const typewriterTexts = [
-  'Refresh.',
-  'Rejuvenate.',
-  'Royalty in Every Drop.'
+const products = [
+  {
+    name: 'Royal Challenge Water',
+    image: rcWater,
+    description: 'Premium quality packaged drinking water for your daily needs.',
+    category: 'Royal Challenge',
+  },
+  {
+    name: 'American Pride Soda',
+    image: americanPride,
+    description: 'Refreshing American Pride soda for every occasion.',
+    category: 'Royal Challenge',
+  },
+  {
+    name: 'Black Dog Soda',
+    image: bdSoda,
+    description: 'Classic Black Dog soda, a favorite for all.',
+    category: 'Black Dog',
+  },
+  {
+    name: 'Black Dog Soda Solo',
+    image: bdSodaSolo,
+    description: 'Solo edition of Black Dog soda.',
+    category: 'Black Dog',
+  },
+  {
+    name: 'Black Dog Soda 2',
+    image: bdSoda2,
+    description: 'Another variant of Black Dog soda.',
+    category: 'Black Dog',
+  },
 ];
 
-function Typewriter() {
-  const [displayed, setDisplayed] = useState('');
-  const [textIdx, setTextIdx] = useState(0);
-  const [charIdx, setCharIdx] = useState(0);
-  const [deleting, setDeleting] = useState(false);
+const cardBase = "bg-white/80 backdrop-blur-xl rounded-3xl shadow-2xl overflow-hidden flex flex-col items-center p-8 transition-transform duration-300 transform hover:scale-110 hover:shadow-2xl animate-fadeInUp border-2 border-cyan-100";
+const imgBase = "object-contain mb-4 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-1";
 
-  useEffect(() => {
-    let timeout;
-    const currentText = typewriterTexts[textIdx];
-    if (!deleting && charIdx < currentText.length) {
-      timeout = setTimeout(() => setCharIdx(charIdx + 1), 80);
-      setDisplayed(currentText.slice(0, charIdx + 1));
-    } else if (!deleting && charIdx === currentText.length) {
-      timeout = setTimeout(() => setDeleting(true), 1200);
-    } else if (deleting && charIdx > 0) {
-      timeout = setTimeout(() => setCharIdx(charIdx - 1), 40);
-      setDisplayed(currentText.slice(0, charIdx - 1));
-    } else if (deleting && charIdx === 0) {
-      setDeleting(false);
-      setTextIdx((textIdx + 1) % typewriterTexts.length);
-    }
-    return () => clearTimeout(timeout);
-  }, [charIdx, deleting, textIdx]);
-
+function Bubbles() {
   return (
-    <span className="text-blue-700 font-extrabold text-2xl sm:text-3xl tracking-wide font-sans h-12 inline-block min-h-[2.5rem]">{displayed}<span className="border-r-2 border-blue-700 animate-pulse ml-1" /></span>
+    <group>
+      {[...Array(12)].map((_, i) => (
+        <mesh key={i} position={[Math.sin(i) * 2.5, i * 0.7 - 3, Math.cos(i) * 2.5]}>
+          <sphereGeometry args={[0.28 + 0.09 * (i % 3), 32, 32]} />
+          <meshStandardMaterial color={i % 2 === 0 ? '#81e6d9' : '#4fd1c5'} transparent opacity={0.45} />
+        </mesh>
+      ))}
+    </group>
   );
 }
 
 const Products = () => {
+  const [carouselIndex, setCarouselIndex] = useState(0);
+  const nextProduct = () => setCarouselIndex((i) => (i + 1) % products.length);
+  const prevProduct = () => setCarouselIndex((i) => (i - 1 + products.length) % products.length);
+
   return (
-    <div className="min-h-screen py-8 sm:py-12 md:py-16 relative overflow-hidden">
-   
-      {/* Main Content */}
-      <div className="max-w-5xl mx-auto px-2 sm:px-4 lg:px-8">
-        <div className="text-center mb-0 animate-fadeInUp">
-          <Typewriter />
+    <div className="min-h-screen relative overflow-hidden py-16 sm:py-20 md:py-24">
+      {/* 3D Animated Bubbles Background */}
+      <div className="absolute inset-0 w-full h-full z-0 pointer-events-none" style={{ filter: 'blur(32px)' }}>
+        <Canvas camera={{ position: [0, 0, 7], fov: 50 }} style={{ width: '100%', height: '100%' }}>
+          <ambientLight intensity={0.7} />
+          <directionalLight position={[5, 10, 7]} intensity={0.7} />
+          <Bubbles />
+          <OrbitControls enableZoom={false} enablePan={false} autoRotate autoRotateSpeed={0.5} />
+        </Canvas>
+      </div>
+      <div className="flex flex-col md:flex-row items-center justify-between max-w-6xl mx-auto px-2 sm:px-4 md:px-8 mb-10 md:mb-20 gap-8">
+        <div className="flex-1 text-center md:text-left z-10">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold mb-4 md:mb-6 text-cyan-700 drop-shadow-lg animate-fadeInUp">Our Products</h1>
+          <p className="text-lg sm:text-xl md:text-2xl mb-4 md:mb-8 text-cyan-900 animate-fadeInUp delay-100">Premium Packaged Drinking Water & Soda</p>
         </div>
-        <div className="text-center mb-10 sm:mb-14 animate-fadeInUp">
-          <h1 className="text-4xl sm:text-6xl font-extrabold font-sans text-blue-900 drop-shadow-lg tracking-tight" style={{marginTop: 0}}>
-            Our Products
-          </h1>
-          <p className="text-xl sm:text-2xl font-medium font-sans text-blue-900/90 drop-shadow">
-            Premium Packaged Drinking Water & Soda
-          </p>
-        </div>
-        {/* Royal Challenge Category */}
-        <div className="mb-12 sm:mb-16 animate-fadeInUp delay-100 mt-10 sm:mt-14">
-          {/* Big Royal Challenge Marketing Image */}
-          <div className="w-full flex justify-center mb-6 sm:mb-10">
-            <img 
-              src={rcBanner} 
-              alt="Royal Challenge Marketing" 
-              className="rounded-xl shadow-2xl w-full max-w-3xl object-cover border-4 border-blue-200 hover:scale-105 transition-transform duration-500"
-              style={{ maxHeight: '400px' }}
-            />
-          </div>
-          <h2 className="text-xl sm:text-2xl font-bold text-blue-700 mb-6 sm:mb-8 text-left">Royal Challenge</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8">
-            <div className={`group ${cardBase} delay-200`}>
-              <img src={rcWater} alt="Royal Challenge Water" className={`h-56 sm:h-64 w-auto ${imgBase}`} width="220" height="256" loading="lazy" />
-              <h3 className="text-lg sm:text-xl font-bold font-sans text-gray-900 mt-2 mb-1">Royal Challenge Water</h3>
-              <p className="text-sm text-gray-700 font-sans text-center px-2">Pure, refreshing packaged drinking water for every occasion.</p>
-            </div>
-            <div className={`group ${cardBase} delay-300`}>
-              <img src={americanPride} alt="American Pride Soda" className={`h-40 sm:h-48 w-auto ${imgBase}`} width="180" height="192" loading="lazy" />
-              <h3 className="text-lg sm:text-xl font-bold font-sans text-gray-900 mt-2 mb-1">American Pride Soda</h3>
-              <p className="text-sm text-gray-700 font-sans text-center px-2">Classic soda with a bold, crisp taste to energize your day.</p>
+        <div className="flex-1 flex flex-col items-center justify-center z-10 animate-fadeInUp delay-200 w-full">
+          {/* Animated Product Card in Carousel */}
+          <div className="mt-6 md:mt-8 w-full flex justify-center">
+            <div
+              className={cardBase + ' scale-105 border-cyan-400 w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg'}
+              style={{ height: 'auto', minHeight: 320, maxHeight: 420, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'flex-start', boxSizing: 'border-box' }}
+            >
+              <div style={{ width: '100%', height: 140, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <img
+                  src={products[carouselIndex].image}
+                  alt={products[carouselIndex].name}
+                  className={imgBase + ' w-auto h-28 sm:h-32 md:h-36 lg:h-40'}
+                  style={{ maxHeight: 140, maxWidth: 180, objectFit: 'contain', width: 'auto', height: 'auto', margin: '0 auto' }}
+                />
+              </div>
+              <h3 className="text-xl sm:text-2xl font-bold text-cyan-900 mb-2 text-center w-full">{products[carouselIndex].name}</h3>
+              <p className="text-cyan-800 text-base sm:text-lg mb-2 text-center w-full">{products[carouselIndex].description}</p>
+              <span className="text-cyan-600 font-semibold text-center w-full">{products[carouselIndex].category}</span>
             </div>
           </div>
+          {/* Carousel Controls below card */}
+          <div className="flex gap-4 mt-4 justify-center">
+            <button onClick={prevProduct} className="bg-cyan-400 hover:bg-cyan-600 text-white px-4 py-2 rounded-full font-bold shadow transition-all duration-200">&#8592;</button>
+            <button onClick={nextProduct} className="bg-cyan-400 hover:bg-cyan-600 text-white px-4 py-2 rounded-full font-bold shadow transition-all duration-200">&#8594;</button>
+          </div>
         </div>
-
-        {/* American Pride Soda Video Section */}
-        <div className="mb-12 sm:mb-16 flex flex-col items-center animate-fadeInUp delay-200">
-          <h2 className="text-xl sm:text-2xl font-bold text-blue-700 mb-4 text-left w-full">American Pride </h2>
-          <video 
-            src={americanPrideVideo} 
-            controls 
-            autoPlay
-            muted
-            loop
-            className="rounded-lg shadow-lg w-full max-w-2xl border-2 border-blue-300 hover:scale-105 transition-transform duration-500 bg-white/70 backdrop-blur-md"
-            style={{ maxHeight: '340px' }}
-            poster={americanPride}
+      </div>
+      {/* Floating Product Cards Grid */}
+      <div className="max-w-6xl mx-auto px-2 sm:px-4 md:px-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 md:gap-12">
+        {products.map((product, i) => (
+          <div
+            key={i}
+            className={cardBase + ' hover:scale-110 w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg'}
+            style={{ animationDelay: `${i * 0.1}s`, minHeight: 320, maxHeight: 420, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'flex-start' }}
           >
-            Your browser does not support the video 
-          </video>
+            <img
+              src={product.image}
+              alt={product.name}
+              className={imgBase + ' w-auto h-28 sm:h-32 md:h-36 lg:h-40'}
+              style={{ maxHeight: 140, minHeight: 100, objectFit: 'contain' }}
+            />
+            <h3 className="text-xl sm:text-2xl font-bold text-cyan-900 mb-2 text-center w-full">{product.name}</h3>
+            <p className="text-cyan-800 text-base sm:text-lg mb-2 text-center w-full">{product.description}</p>
+            <span className="text-cyan-600 font-semibold text-center w-full">{product.category}</span>
+          </div>
+        ))}
+      </div>
+      {/* American Pride Soda Video Section */}
+      <div className="my-10 md:my-20 flex flex-col items-center animate-fadeInUp delay-200 w-full px-2 sm:px-4 md:px-0">
+        <div className="w-full flex justify-center mb-4 md:mb-6">
+          <h2 className="text-2xl sm:text-3xl font-bold text-cyan-700 mb-2 md:mb-4 text-center w-full">American Pride</h2>
         </div>
-
-        {/* Black Dog Category */}
-        <div className="mb-8 animate-fadeInUp delay-300">
-          <h2 className="text-xl sm:text-2xl font-bold text-blue-700 mb-6 sm:mb-8 text-left">Black Dog Products</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 sm:gap-8 overflow-x-auto">
-            <div className={`group ${cardBase} delay-700`}>
-              <img src={bdLogo} alt="Black Dog Logo" className={`h-56 w-auto ${imgBase} bg-black p-2 rounded`} width="220" height="256" loading="lazy" />
-              <h3 className="text-lg font-bold font-sans text-gray-900 mt-2 mb-1">Black Dog Brand</h3>
-              <p className="text-sm text-gray-700 font-sans text-center px-2">Symbol of quality and trust in every drop and bubble.</p>
-            </div>
-            <div className={`group ${cardBase} delay-400`}>
-              <img src={bdSoda} alt="Black Dog Soda" className={`h-56 w-auto ${imgBase}`} width="220" height="256" loading="lazy" />
-              <h3 className="text-lg font-bold font-sans text-gray-900 mt-2 mb-1">Black Dog Soda</h3>
-              <p className="text-sm text-gray-700 font-sans text-center px-2">Sparkling soda with a unique, refreshing flavor.</p>
-            </div>
-            <div className={`group ${cardBase} delay-500`}>
-              <img src={bdSodaSolo} alt="Black Dog Soda Solo" className={`h-56 w-auto ${imgBase}`} width="220" height="256" loading="lazy" />
-              <h3 className="text-lg font-bold font-sans text-gray-900 mt-2 mb-1">Black Dog Soda Solo</h3>
-              <p className="text-sm text-gray-700 font-sans text-center px-2">Perfect for solo refreshment, anytime, anywhere.</p>
-            </div>
-            <div className={`group ${cardBase} delay-600`}>
-              <img src={bdSoda2} alt="Black Dog Soda 2" className={`h-56 w-auto ${imgBase}`} width="220" height="256" loading="lazy" />
-              <h3 className="text-lg font-bold font-sans text-gray-900 mt-2 mb-1">Black Dog Soda</h3>
-              <p className="text-sm text-gray-700 font-sans text-center px-2">Enjoy the classic taste in every sip.</p>
-            </div>
-            {/* New Black Dog Water Products */}
-            <div className={`group ${cardBase} delay-800`}>
-              <img src={oneLiterBlackDog} alt="Black Dog Water 1 Liter" className={`h-56 w-auto ${imgBase}`} width="220" height="256" loading="lazy" />
-              <h3 className="text-lg font-bold font-sans text-gray-900 mt-2 mb-1">Black Dog Water 1L</h3>
-              <p className="text-sm text-gray-700 font-sans text-center px-2">Convenient 1L bottle for hydration on the go.</p>
-            </div>
-            <div className={`group ${cardBase} delay-900`}>
-              <img src={fiveHundredMlBlackDog} alt="Black Dog Water 500ml" className={`h-56 w-auto ${imgBase}`} width="220" height="256" loading="lazy" />
-              <h3 className="text-lg font-bold font-sans text-gray-900 mt-2 mb-1">Black Dog Water 500ml</h3>
-              <p className="text-sm text-gray-700 font-sans text-center px-2">Compact 500ml bottle, perfect for travel and daily use.</p>
-            </div>
-            <div className={`group ${cardBase} delay-1000`}>
-              <img src={blackDogBoth} alt="Black Dog Water 1L & 500ml" className={`h-56 w-auto ${imgBase}`} width="220" height="256" loading="lazy" />
-              <h3 className="text-lg font-bold font-sans text-gray-900 mt-2 mb-1">Black Dog Water (1L & 500ml)</h3>
-              <p className="text-sm text-gray-700 font-sans text-center px-2">Choose your size: 1L for sharing, 500ml for convenience.</p>
-            </div>
+        <div className="relative flex justify-center items-center w-full">
+          {/* Animated background effect */}
+          <div className="absolute inset-0 flex justify-center items-center z-0">
+            <div className="w-48 h-48 sm:w-80 sm:h-80 bg-gradient-to-br from-cyan-200 via-blue-200 to-cyan-100 rounded-full blur-3xl opacity-60 animate-pulse"></div>
+          </div>
+          {/* Glassmorphism video card */}
+          <div className="relative z-10 rounded-3xl shadow-2xl bg-white/60 backdrop-blur-xl border-4 border-cyan-200/60 p-2 sm:p-4 flex flex-col items-center w-full max-w-xs sm:max-w-md md:max-w-xl" style={{ minWidth: 0 }}>
+            <video 
+              src={americanPrideVideo} 
+              controls 
+              autoPlay
+              muted
+              loop
+              className="rounded-xl shadow-lg w-full border-2 border-cyan-300 hover:scale-105 transition-transform duration-500 bg-white/70 backdrop-blur-md"
+              style={{ maxHeight: '260px', minHeight: '120px' }}
+              poster={americanPride}
+            >
+              Your browser does not support the video 
+            </video>
           </div>
         </div>
       </div>
