@@ -1,21 +1,10 @@
 import { Canvas } from '@react-three/fiber';
-import { OrbitControls, Stage } from '@react-three/drei';
+import { OrbitControls, Stage, useGLTF } from '@react-three/drei';
 import { Suspense } from 'react';
 
-function Bottle() {
-  // Simple 3D bottle placeholder (cylinder + sphere cap)
-  return (
-    <group>
-      <mesh castShadow receiveShadow>
-        <cylinderGeometry args={[0.5, 0.5, 2, 32]} />
-        <meshStandardMaterial color="#4fd1c5" metalness={0.3} roughness={0.2} />
-      </mesh>
-      <mesh position={[0, 1.1, 0]} castShadow>
-        <sphereGeometry args={[0.5, 32, 32]} />
-        <meshStandardMaterial color="#81e6d9" metalness={0.5} roughness={0.1} />
-      </mesh>
-    </group>
-  );
+function MyModel() {
+  const { scene } = useGLTF('/myModel.glb');
+  return <primitive object={scene} scale={1.5} position={[0, -1, 0]} />;
 }
 
 function Bubbles() {
@@ -44,9 +33,9 @@ const Home = () => {
         </Canvas>
       </div>
       {/* 3D Hero Section */}
-      <div className="w-full flex flex-col md:flex-row items-center justify-between max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-12 gap-8">
+      <div className="w-full flex flex-col md:flex-row items-center justify-between max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-12 gap-8 mb-16">
         <div className="flex-1 text-center md:text-left z-10">
-          <h1 className="text-5xl md:text-7xl font-extrabold mb-6 text-white drop-shadow-lg animate-fadeInUp">Welcome to <span className="bg-white/20 px-2 rounded-xl backdrop-blur-md">MARUTI ENTERPRISE</span></h1>
+          <h1 className="text-5xl md:text-7xl font-extrabold mb-6 text-white drop-shadow-lg animate-fadeInUp">Welcome to <span className="t px-2 rounded-xl backdrop-blur-md">MARUTI ENTERPRISE</span></h1>
           <p className="text-2xl md:text-3xl mb-8 text-white/90 animate-fadeInUp delay-100">Your Trusted Partner in Quality Beverages</p>
           <a href="/products" className="inline-block bg-gradient-to-r from-cyan-400 to-blue-600 text-white px-10 py-4 rounded-full font-bold text-xl shadow-xl hover:scale-105 hover:from-blue-500 hover:to-cyan-500 transition-all duration-300 animate-fadeInUp delay-200">
             Explore Our Products
@@ -59,7 +48,7 @@ const Home = () => {
                 <ambientLight intensity={0.7} />
                 <directionalLight position={[5, 10, 7]} intensity={1.2} castShadow />
                 <Stage environment="city" intensity={0.6}>
-                  <Bottle />
+                  <MyModel />
                 </Stage>
                 <OrbitControls enableZoom={false} autoRotate autoRotateSpeed={2} />
               </Canvas>
